@@ -94,7 +94,12 @@ export default function RaffleView({ raffle }) {
                 style={{ background: 'linear-gradient(to bottom, #0f172a, #1e1b4b)' }}
             >
                 {/* Header */}
-                <div className="text-center space-y-4">
+                <div className="text-center space-y-6">
+                    <div className="flex justify-center">
+                        <div className="w-24 h-24 rounded-3xl bg-indigo-500/20 flex items-center justify-center border-2 border-indigo-500/30">
+                            <img src="/logo.png" alt="Logo" className="w-20 h-20 object-contain" crossOrigin="anonymous" />
+                        </div>
+                    </div>
                     <h1 className="text-6xl font-bold text-white leading-tight">{raffle.title}</h1>
                     <div className="flex justify-center gap-8 text-3xl text-indigo-300">
                         <span className="flex items-center gap-3">

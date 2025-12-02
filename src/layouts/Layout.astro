@@ -34,6 +34,28 @@ import "../styles/global.css";
 			>
 			</div>
 		</div>
+
+		<header
+			class="container mx-auto px-4 py-6 flex items-center justify-between relative z-10"
+		>
+			<a href="/" class="flex items-center gap-3 group">
+				<div
+					class="w-10 h-10 rounded-xl bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30 group-hover:border-indigo-500/50 transition-colors"
+				>
+					<img
+						src="/logo.png"
+						alt="Logo"
+						class="w-8 h-8 object-contain"
+					/>
+				</div>
+				<span
+					class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-slate-400"
+				>
+					Rifas Exclusivas
+				</span>
+			</a>
+		</header>
+
 		<slot />
 	</body>
 </html>
