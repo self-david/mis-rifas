@@ -5,7 +5,7 @@ import TicketGrid from './TicketGrid';
 
 export default function RaffleView({ raffle }) {
     const [selectedTickets, setSelectedTickets] = useState([]);
-    const captureRef = useRef(null);
+    const captureRef = useRef(null); // Ref for the hidden story template
     const [isGenerating, setIsGenerating] = useState(false);
 
     const handleToggleTicket = (number) => {
@@ -21,15 +21,27 @@ export default function RaffleView({ raffle }) {
         setIsGenerating(true);
 
         try {
-            // html-to-image handles modern CSS (like oklch) better than html2canvas
-            const dataUrl = await toPng(captureRef.current, {
+            // Force the hidden container to be visible for capture
+            const element = captureRef.current;
+            element.style.display = 'flex';
+
+            const dataUrl = await toPng(element, {
                 backgroundColor: '#0f172a',
                 cacheBust: true,
-                pixelRatio: 2
+                pixelRatio: 2,
+                width: 1080,
+                height: 1920,
+                style: {
+                    display: 'flex', // Ensure it's flex in the clone
+                    visibility: 'visible',
+                }
             });
 
+            // Hide it again
+            element.style.display = 'none';
+
             const link = document.createElement('a');
-            link.download = `rifa-${raffle.title.toLowerCase().replace(/\s+/g, '-')}.png`;
+            link.download = `rifa-${raffle.title.toLowerCase().replace(/\s+/g, '-')}-story.png`;
             link.href = dataUrl;
             link.click();
 
@@ -37,6 +49,9 @@ export default function RaffleView({ raffle }) {
             console.error('Error generating image:', err);
             alert('No se pudo generar la imagen. Intenta de nuevo.');
         } finally {
+            if (captureRef.current) {
+                captureRef.current.style.display = 'none';
+            }
             setIsGenerating(false);
         }
     };
@@ -64,9 +79,7 @@ export default function RaffleView({ raffle }) {
         return new Date(dateString).toLocaleDateString('es-ES', {
             year: 'numeric',
             month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit'
+            day: 'numeric'
         });
     };
 
@@ -74,10 +87,59 @@ export default function RaffleView({ raffle }) {
 
     return (
         <div className="max-w-6xl mx-auto p-4 sm:p-6 lg:p-8">
+            {/* Hidden Story Template (1080x1920) */}
+            <div
+                ref={captureRef}
+                className="opacity fixed top-0 left-0 z-[-1] w-[1080px] h-[1920px] bg-slate-950 p-16 flex-col gap-12 hidden"
+                style={{ background: 'linear-gradient(to bottom, #0f172a, #1e1b4b)' }}
+            >
+                {/* Header */}
+                <div className="text-center space-y-4">
+                    <h1 className="text-6xl font-bold text-white leading-tight">{raffle.title}</h1>
+                    <div className="flex justify-center gap-8 text-3xl text-indigo-300">
+                        <span className="flex items-center gap-3">
+                            <Calendar className="w-8 h-8" /> {formatDate(raffle.endDate)}
+                        </span>
+                        <span className="flex items-center gap-3">
+                            <Ticket className="w-8 h-8" /> {availableCount} Disponibles
+                        </span>
+                    </div>
+                </div>
+
+                {/* Main Image */}
+                <div className="w-full aspect-video rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border-4 border-slate-800">
+                    <img
+                        src={raffle.image}
+                        alt={raffle.title}
+                        className="w-full h-full object-cover"
+                        crossOrigin="anonymous"
+                    />
+                </div>
+
+                {/* Ticket Grid */}
+                <div className="flex-1 bg-slate-900/50 p-8 rounded-3xl border border-slate-800 flex flex-col">
+                    <h2 className="text-4xl font-bold text-white mb-8 text-center">Tabla de Boletos</h2>
+                    <div className="flex-1">
+                        <TicketGrid
+                            occupiedTickets={raffle.occupiedTickets}
+                            selectedTickets={selectedTickets}
+                            onToggleTicket={() => { }} // Read-only in image
+                        />
+                    </div>
+                </div>
+
+                {/* Footer */}
+                <div className="text-center pt-8 border-t border-slate-800">
+                    <p className="text-4xl font-bold text-indigo-400">¡Participa ahora!</p>
+                    <p className="text-2xl text-slate-400 mt-4">Escanea o visita el enlace</p>
+                </div>
+            </div>
+
+            {/* Visible Content */}
             <div className="grid lg:grid-cols-2 gap-8 lg:gap-12">
                 {/* Left Column: Details & Image */}
                 <div className="space-y-8">
-                    <div ref={captureRef} className="bg-slate-900/50 p-6 rounded-3xl border border-slate-800 space-y-6">
+                    <div className="bg-slate-900/50 p-6 rounded-3xl border border-slate-800 space-y-6">
                         <div className="relative aspect-video w-full overflow-hidden rounded-2xl shadow-2xl shadow-black/50">
                             <img
                                 src={raffle.image}
@@ -137,7 +199,7 @@ export default function RaffleView({ raffle }) {
                             className="flex-1 bg-slate-800 hover:bg-slate-700 text-white py-4 px-6 rounded-xl font-bold transition-all flex items-center justify-center gap-2 border border-slate-700 hover:border-slate-600 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             <Download className="h-5 w-5" />
-                            {isGenerating ? 'Generando...' : 'Descargar Ficha'}
+                            {isGenerating ? 'Generando...' : 'Descargar Ficha (Story)'}
                         </button>
                         <button
                             onClick={handleShare}
