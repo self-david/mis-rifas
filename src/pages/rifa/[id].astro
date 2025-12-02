@@ -1,0 +1,42 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import RaffleView from "../../components/RaffleView";
+import { raffles } from "../../data/raffles";
+
+export function getStaticPaths() {
+    return raffles.map((raffle) => ({
+        params: { id: raffle.id },
+        props: { raffle },
+    }));
+}
+
+const { raffle } = Astro.props;
+---
+
+<Layout title={`${raffle.title} | Rifas Exclusivas`}>
+    <div class="min-h-screen py-8 sm:py-12">
+        <div class="container mx-auto px-4 mb-8">
+            <a
+                href="/"
+                class="inline-flex items-center text-slate-400 hover:text-white transition-colors mb-8 group"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="mr-2 group-hover:-translate-x-1 transition-transform"
+                    ><path d="m15 18-6-6 6-6"></path></svg
+                >
+                Volver al inicio
+            </a>
+        </div>
+
+        <RaffleView raffle={raffle} client:load />
+    </div>
+</Layout>
