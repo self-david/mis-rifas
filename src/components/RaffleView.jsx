@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { Calendar, Download, Share2, Ticket } from 'lucide-react';
-import html2canvas from 'html2canvas';
+import { toPng } from 'html-to-image';
 import TicketGrid from './TicketGrid';
 
 export default function RaffleView({ raffle }) {
@@ -21,21 +21,42 @@ export default function RaffleView({ raffle }) {
         setIsGenerating(true);
 
         try {
-            const canvas = await html2canvas(captureRef.current, {
-                backgroundColor: '#0f172a', // Match slate-950
-                scale: 2, // Higher quality
-                useCORS: true // Allow loading external images
+            // html-to-image handles modern CSS (like oklch) better than html2canvas
+            const dataUrl = await toPng(captureRef.current, {
+                backgroundColor: '#0f172a',
+                cacheBust: true,
+                pixelRatio: 2
             });
 
             const link = document.createElement('a');
             link.download = `rifa-${raffle.title.toLowerCase().replace(/\s+/g, '-')}.png`;
-            link.href = canvas.toDataURL('image/png');
+            link.href = dataUrl;
             link.click();
+
         } catch (err) {
             console.error('Error generating image:', err);
-            alert('Hubo un error al generar la imagen.');
+            alert('No se pudo generar la imagen. Intenta de nuevo.');
         } finally {
             setIsGenerating(false);
+        }
+    };
+
+    const handleShare = async () => {
+        const shareData = {
+            title: raffle.title,
+            text: `¡Participa en la rifa de ${raffle.title}!`,
+            url: window.location.href
+        };
+
+        try {
+            if (navigator.share) {
+                await navigator.share(shareData);
+            } else {
+                await navigator.clipboard.writeText(window.location.href);
+                alert('¡Enlace copiado al portapapeles!');
+            }
+        } catch (err) {
+            console.error('Error sharing:', err);
         }
     };
 
@@ -118,7 +139,10 @@ export default function RaffleView({ raffle }) {
                             <Download className="h-5 w-5" />
                             {isGenerating ? 'Generando...' : 'Descargar Ficha'}
                         </button>
-                        <button className="bg-indigo-600 hover:bg-indigo-500 text-white py-4 px-6 rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-0.5">
+                        <button
+                            onClick={handleShare}
+                            className="bg-indigo-600 hover:bg-indigo-500 text-white py-4 px-6 rounded-xl font-bold transition-all flex items-center justify-center gap-2 shadow-lg shadow-indigo-500/20 hover:shadow-indigo-500/40 hover:-translate-y-0.5"
+                        >
                             <Share2 className="h-5 w-5" />
                             Compartir
                         </button>
