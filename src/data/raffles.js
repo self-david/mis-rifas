@@ -1,32 +1,23 @@
 export const raffles = [
   {
-    id: '1',
-    title: 'Gran Rifa de iPhone 15 Pro Max',
-    description: '¡Participa y gana el nuevo iPhone 15 Pro Max! Solo 100 boletos disponibles. El sorteo se realizará en vivo por Instagram.',
-    image: 'https://images.unsplash.com/photo-1695048133142-1a20484d2569?auto=format&fit=crop&q=80&w=800',
-    createdAt: '2023-10-01T10:00:00Z',
-    endDate: '2023-12-25T20:00:00Z',
-    price: 50,
-    occupiedTickets: [1, 5, 10, 15, 20, 25, 50, 75, 99, 100, 12, 34, 56, 78]
-  },
-  {
-    id: '2',
-    title: 'Sorteo de MacBook Air M2',
-    description: 'Llévate la laptop más ligera y potente de Apple. Ideal para estudiantes y profesionales.',
-    image: 'https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?auto=format&fit=crop&q=80&w=800',
-    createdAt: '2023-11-01T09:00:00Z',
-    endDate: '2024-01-15T18:00:00Z',
-    price: 100,
-    occupiedTickets: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
-  },
-  {
-    id: '3',
-    title: 'Cena Romántica para 2',
-    description: 'Disfruta de una experiencia gastronómica inolvidable en el mejor restaurante de la ciudad.',
-    image: 'https://images.unsplash.com/photo-1559339352-11d035aa65de?auto=format&fit=crop&q=80&w=800',
-    createdAt: '2023-11-10T12:00:00Z',
-    endDate: '2023-11-30T21:00:00Z',
-    price: 20,
-    occupiedTickets: Array.from({ length: 80 }, (_, i) => i + 1) // Almost full
+    id: 'dia-de-las-madres-gap',
+    title: 'Gran Sorteo Día de las Madres - GAP\'S Graduados',
+    description: '¡Celebremos juntos el amor incondicional! 🌸 Esta rifa es un tributo especial para todas las madres de nuestra comunidad GAP\'S Graduados. Participa por un detalle exclusivo hecho a medida y grabado en madera, totalmente personalizado para agradecer a esa persona que lo da todo.',
+    image: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80&w=800', // Beautiful flowers for Mother's Day
+    createdAt: '2024-04-01T10:00:00Z',
+    endDate: '2024-04-23T23:59:59Z', // Thursday 23rd April (Year assumed 2024 or generic)
+    drawDate: '2024-04-24T20:00:00Z', // Friday 24th April
+    price: 0,
+    totalTickets: 1000,
+    startNumber: 0,
+    digits: 3,
+    winningNumber: null, // To be filled manually
+    occupiedTickets: [], // Managed externally
+    externalRegistrationLink: 'https://docs.google.com/spreadsheets/d/11Z3wzZfIVDri_Ui9Bd7slmy9Xvymn3jf5JvNB4YI4KI/edit?usp=sharing',
+    rules: {
+      source: 'Lotería Nacional - Sorteo Superior (24 de Abril)',
+      description: 'El último día para adquirir un boleto es el jueves 23 de abril. El ganador se determinará con las últimas 3 cifras del Premio Mayor del Sorteo Superior del viernes 24 de abril.',
+      fallback: 'Si no hay ganador exacto, el premio se asignará al número con menor diferencia absoluta. En caso de empate (equidistancia), ambos ganan.'
+    }
   }
 ];
