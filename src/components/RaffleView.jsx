@@ -374,7 +374,7 @@ export default function RaffleView({ raffle }) {
 
                      {/* RULES / ETC */}
                      {raffle.rules && (
-                        <div className="bg-slate-900/50 p-6 rounded-3xl border border-slate-800 space-y-6">
+                        <div className="bg-slate-900/50 p-4 rounded-3xl border border-slate-800 space-y-6">
                             <div className="flex items-center gap-3 text-indigo-400">
                                 <div className="p-2 bg-indigo-500/10 rounded-lg">
                                     <Info className="w-6 h-6" />
@@ -383,7 +383,7 @@ export default function RaffleView({ raffle }) {
                             </div>
 
                             <div className="space-y-4">
-                                <div className="bg-emerald-500/10 p-4 rounded-xl border border-emerald-500/20 px-6">
+                                <div className="bg-emerald-500/10 p-4 rounded-xl border border-emerald-500/20 px-4">
                                     <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-wider mb-2">Cronograma</h3>
                                     <ul className="text-slate-200 space-y-2 text-sm">
                                         <li className="flex items-center gap-2">
