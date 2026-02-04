@@ -1,8 +1,8 @@
 export const raffles = [
   {
     id: 'dia-de-las-madres-gap',
-    title: 'Gran Sorteo Día de las Madres - GAP\'S Graduados',
-    description: '¡Celebremos juntos el amor incondicional! 🌸 Esta rifa es un tributo especial para todas las madres de nuestra comunidad GAP\'S Graduados. Participa por un detalle exclusivo hecho a medida y grabado en madera, totalmente personalizado para agradecer a esa persona que lo da todo.',
+    title: 'Sorteo Día de las Madres para GAP\'S Graduados',
+    description: '¡Celebremos juntos el amor incondicional! 🌸 Esta rifa es un tributo especial para todas las madres. Participa por un detalle exclusivo hecho a medida y grabado en madera, totalmente personalizado para agradecer a esa persona que lo da todo.',
     image: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80&w=800', // Beautiful flowers for Mother's Day
     createdAt: '2024-04-01T10:00:00Z',
     endDate: '2024-04-23T23:59:59Z', // Thursday 23rd April (Year assumed 2024 or generic)
@@ -20,8 +20,8 @@ export const raffles = [
       fallback: 'Si no hay ganador exacto, el premio se asignará al número con menor diferencia absoluta. En caso de empate (equidistancia), ambos ganan.',
     },
     seo: {
-      title: 'Sorteo Día de las Madres 🌸 | GAP\'S Graduados',
-      description: 'Participa en nuestro tributo especial para mamá. Gana un detalle exclusivo grabado en madera. ¡Sorteo el 24 de Abril!',
+      title: 'Sorteo Día de las Madres 🌸',
+      description: 'Participa y gana un detalle exclusivo grabado en madera. ¡Sorteo el 24 de Abril!',
       image: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80&w=1200',
     }
   }
