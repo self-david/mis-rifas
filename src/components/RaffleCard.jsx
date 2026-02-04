@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Calendar, Ticket } from 'lucide-react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -8,8 +8,44 @@ export function cn(...inputs) {
 }
 
 export default function RaffleCard({ raffle }) {
-    const occupiedCount = raffle.occupiedTickets.length;
-    const progress = (occupiedCount / 100) * 100;
+    const [sheetOccupiedCount, setSheetOccupiedCount] = useState(0);
+
+    useEffect(() => {
+        if (!raffle.externalRegistrationLink) return;
+
+        const fetchCount = async () => {
+            try {
+                const sheetIdMatch = raffle.externalRegistrationLink.match(/\/d\/(.*?)(\/|$)/);
+                if (!sheetIdMatch) return;
+                
+                const sheetId = sheetIdMatch[1];
+                const csvUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv`;
+
+                const response = await fetch(csvUrl);
+                if (!response.ok) return;
+                
+                const text = await response.text();
+                const rows = text.split('\n');
+                // Assuming first row is header, so rows - 1. 
+                // A better check matches RaffleView logic but for count:
+                // Filter empty rows effectively
+                 const count = rows.slice(1).filter(r => {
+                    // Simple check if row has enough content to be a participant
+                    return r.trim().split(',').length >= 2;
+                }).length;
+                
+                setSheetOccupiedCount(count);
+            } catch (e) {
+                console.error("Error fetching count in card", e);
+            }
+        };
+
+        fetchCount();
+    }, [raffle.externalRegistrationLink]);
+
+    const occupiedCount = raffle.externalRegistrationLink ? sheetOccupiedCount : raffle.occupiedTickets.length;
+    const totalTickets = raffle.totalTickets || 100;
+    const progress = (occupiedCount / totalTickets) * 100;
 
     const formatDate = (dateString) => {
         return new Date(dateString).toLocaleDateString('es-ES', {
@@ -48,7 +84,7 @@ export default function RaffleCard({ raffle }) {
                 <div className="space-y-2">
                     <div className="flex justify-between text-sm">
                         <span className="text-slate-400">Progreso</span>
-                        <span className="font-medium text-indigo-400">{occupiedCount}/100</span>
+                        <span className="font-medium text-indigo-400">{occupiedCount}/{totalTickets}</span>
                     </div>
                     <div className="h-2 w-full overflow-hidden rounded-full bg-slate-800">
                         <div

@@ -5,25 +5,21 @@ import { raffles } from "../data/raffles";
 ---
 
 <Layout title="Rifas Exclusivas | Inicio">
-	<main class="container mx-auto px-4 py-12 sm:py-20">
-		<div class="text-center mb-16 space-y-4">
-			<h1
-				class="text-4xl sm:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-indigo-400 pb-2"
-			>
-				Rifas Exclusivas
-			</h1>
-			<p class="text-slate-400 text-lg max-w-2xl mx-auto">
-				Participa en los sorteos más emocionantes. Solo 100 boletos por
-				rifa. ¡Tus oportunidades de ganar son reales!
-			</p>
-		</div>
+  <main class="container mx-auto px-4 py-12 sm:py-20">
+    <div class="text-center mb-16 space-y-4">
+      <h1
+        class="text-4xl sm:text-6xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white via-indigo-200 to-indigo-400 pb-2"
+      >
+        Rifas Exclusivas
+      </h1>
+      <p class="text-slate-400 text-lg max-w-2xl mx-auto">
+        Participa en los sorteos más emocionantes con oportunidades reales de
+        ganar. ¡Elige tu número de la suerte y gana premios exclusivos!
+      </p>
+    </div>
 
-		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-			{
-				raffles.map((raffle) => (
-					<RaffleCard raffle={raffle} client:load />
-				))
-			}
-		</div>
-	</main>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {raffles.map((raffle) => <RaffleCard raffle={raffle} client:load />)}
+    </div>
+  </main>
 </Layout>
