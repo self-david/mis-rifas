@@ -336,7 +336,7 @@ export default function RaffleView({ raffle }) {
                                         return (
                                             <>
                                                 <div className="bg-slate-900/50 p-6 rounded-2xl border border-amber-500/20 text-center">
-                                                    <div className="grid grid-cols-2 divide-x divide-slate-800">
+                                                    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-0 sm:divide-x divide-slate-800">
                                                         <div>
                                                             <p className="text-slate-400 text-xs mb-1 uppercase font-bold tracking-widest">Sorteo Nacional</p>
                                                             <div className="text-3xl font-bold text-slate-300 font-mono">
@@ -426,20 +426,20 @@ export default function RaffleView({ raffle }) {
                                     {participants.length} Registrados
                                 </span>
                              </div>
-                             <div className="max-h-[500px] overflow-y-auto">
+                             <div className="max-h-[500px] overflow-auto">
                                 <table className="w-full text-left text-sm text-slate-400">
                                     <thead className="bg-slate-800/50 text-xs uppercase font-bold text-slate-300 sticky top-0">
                                         <tr>
-                                            <th className="px-6 py-4">Boleto</th>
-                                            <th className="px-6 py-4">Nombre</th>
-                                            <th className="px-6 py-4">GAP</th>
+                                            <th className="px-6 py-4 whitespace-nowrap">Boleto</th>
+                                            <th className="px-6 py-4 whitespace-nowrap">Nombre</th>
+                                            <th className="px-6 py-4 whitespace-nowrap">GAP</th>
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-slate-800/50">
                                         {[...participants].sort((a,b) => a.ticket - b.ticket).map((p, i) => (
                                             <tr key={i} className="hover:bg-slate-800/30 transition-colors">
                                                 <td className="px-6 py-4 font-mono text-indigo-400 font-bold">#{p.ticket.toString().padStart(raffle.digits || 3, '0')}</td>
-                                                <td className="px-6 py-4 text-white">{p.name}</td>
+                                                <td className="px-6 py-4 text-white whitespace-nowrap">{p.name}</td>
                                                 <td className="px-6 py-4">{p.gap}</td>
                                             </tr>
                                         ))}
@@ -453,12 +453,12 @@ export default function RaffleView({ raffle }) {
 
             {/* Ticket Grid Modal */}
             {showGridModal && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 lg:p-8">
+                <div className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6 lg:p-8">
                     <div 
                         className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm"
                         onClick={() => setShowGridModal(false)}
                     />
-                    <div className="relative w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
+                    <div className="relative w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[95vh] sm:max-h-[90vh]">
                         <div className="p-6 border-b border-slate-800 flex items-center justify-between bg-slate-900/50">
                             <div>
                                 <h2 className="text-2xl font-bold text-white">Disponibilidad de Boletos</h2>

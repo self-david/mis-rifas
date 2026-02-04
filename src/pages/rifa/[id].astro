@@ -13,7 +13,11 @@ export function getStaticPaths() {
 const { raffle } = Astro.props;
 ---
 
-<Layout title={`${raffle.title} | Rifas Exclusivas`}>
+<Layout
+  title={raffle.seo?.title || `${raffle.title} | Rifas Exclusivas`}
+  description={raffle.seo?.description || raffle.description}
+  image={raffle.seo?.image || raffle.image}
+>
   <div class="min-h-screen py-8 sm:py-12">
     <div class="container mx-auto px-4 mb-8">
       <a

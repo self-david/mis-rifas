@@ -17,7 +17,12 @@ export const raffles = [
     rules: {
       source: 'Lotería Nacional - Sorteo Superior (24 de Abril)',
       description: 'El último día para adquirir un boleto es el jueves 23 de abril. El ganador se determinará con las últimas 3 cifras del Premio Mayor del Sorteo Superior del viernes 24 de abril.',
-      fallback: 'Si no hay ganador exacto, el premio se asignará al número con menor diferencia absoluta. En caso de empate (equidistancia), ambos ganan.'
+      fallback: 'Si no hay ganador exacto, el premio se asignará al número con menor diferencia absoluta. En caso de empate (equidistancia), ambos ganan.',
+    },
+    seo: {
+      title: 'Sorteo Día de las Madres 🌸 | GAP\'S Graduados',
+      description: 'Participa en nuestro tributo especial para mamá. Gana un detalle exclusivo grabado en madera. ¡Sorteo el 24 de Abril!',
+      image: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80&w=1200',
     }
   }
 ];
