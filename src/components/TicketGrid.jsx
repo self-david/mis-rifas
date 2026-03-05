@@ -1,6 +1,7 @@
 import React from 'react';
 import { clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { X } from 'lucide-react';
 
 function cn(...inputs) {
     return twMerge(clsx(inputs));
@@ -30,7 +31,14 @@ export default function TicketGrid({ occupiedTickets = [], selectedTickets = [],
                         )}
                         title={isOccupied ? "Ocupado" : `Boleto ${number.toString().padStart(digits, '0')}`}
                     >
-                        {number.toString().padStart(digits, '0')}
+                        {isOccupied ? (
+                            <div className="relative flex items-center justify-center">
+                                <span className="opacity-20">{number.toString().padStart(digits, '0')}</span>
+                                <X className="absolute w-5 h-5 text-slate-500/50" strokeWidth={3} />
+                            </div>
+                        ) : (
+                            number.toString().padStart(digits, '0')
+                        )}
                     </button>
                 );
             })}

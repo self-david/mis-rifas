@@ -17,7 +17,7 @@ export const raffles = [
     rules: {
       source: 'Lotería Nacional - Sorteo Superior (24 de Abril)',
       description: 'El último día para adquirir un boleto es el jueves 23 de abril. El ganador se determinará con las últimas 3 cifras del Premio Mayor del Sorteo Superior del viernes 24 de abril.',
-      fallback: 'Si no hay ganador exacto, el premio se asignará al número con menor diferencia absoluta. En caso de empate (equidistancia), ambos ganan.',
+      fallback: 'Si no hay ganador exacto, el premio se asignará al número con menor diferencia absoluta. En caso de empate (equidistancia), ambos ganan y se daran 2 premios a cada uno.',
     },
     seo: {
       title: 'Sorteo Día de las Madres 🌸',
@@ -54,6 +54,24 @@ export const raffles = [
         name: 'caja sombra',
         description: 'Caja de sombras 3D para el Día de la Madre con flores y mariposas, arte en papel en capas',
         image: '/dia de las madres/caja-sombra.webp'
+      },
+      {
+        id: 'marcos',
+        name: 'marcos',
+        description: 'marco de dia de las madres con mensaje personalizado',
+        image: '/dia de las madres/marcos.jpg'
+      },
+      {
+        id: 'caja-de-regalo',
+        name: 'caja de regalo',
+        description: 'caja de regalo con mensaje personalizado',
+        image: '/dia de las madres/caja-de-regalo.jpg'
+      },
+      {
+        id: 'tulipanes',
+        name: 'tulipanes',
+        description: 'Tulipanes para el día de la madre',
+        image: '/dia de las madres/tulipanes.jpg'
       }
     ]
   }

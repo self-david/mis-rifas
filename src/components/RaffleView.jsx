@@ -481,7 +481,9 @@ export default function RaffleView({ raffle }) {
                         <div className="p-6 overflow-y-auto">
                             <div className="flex flex-wrap gap-4 text-sm mb-6 bg-slate-800/30 p-4 rounded-2xl border border-slate-800/50 italic">
                                 <div className="flex items-center gap-2">
-                                    <div className="w-4 h-4 rounded bg-slate-800 border border-slate-700"></div>
+                                    <div className="w-4 h-4 rounded bg-slate-800 border border-slate-700 flex items-center justify-center">
+                                        <X className="w-3 h-3 text-slate-500/50" />
+                                    </div>
                                     <span className="text-slate-400">Ocupado</span>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -570,7 +572,8 @@ export default function RaffleView({ raffle }) {
                         <div className='p-6 overflow-y-auto space-y-6'>
                             <div className='bg-indigo-500/10 p-4 rounded-2xl border border-indigo-500/20 border-l-4 border-l-indigo-500'>
                                 <p className='text-slate-200 text-sm text-center'>
-                                    ¡Tú decides tu recompensa! El ganador de este sorteo podrá elegir <strong>3 de los premios</strong> mostrados a continuación.
+                                    ¡Tú decides tu recompensa! El ganador de este sorteo podrá elegir <strong>3 de los premios</strong> mostrados a continuación.<br/>
+                                    se iran agregando mas imagenes de los premios conforme se vayan adquiriendo los boletos
                                 </p>
                             </div>
                             <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
