@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Calendar, Download, Share2, Ticket, ExternalLink, Info, X } from 'lucide-react';
+import { Calendar, Download, Share2, Ticket, ExternalLink, Info, X, Users } from 'lucide-react'
 import { toPng } from 'html-to-image';
 import TicketGrid from './TicketGrid';
 import { findWinner } from '../utils/raffleWinner';
@@ -7,8 +7,10 @@ import { findWinner } from '../utils/raffleWinner';
 export default function RaffleView({ raffle }) {
     const [selectedTickets, setSelectedTickets] = useState([]);
     const captureRef = useRef(null);
-    const [isGenerating, setIsGenerating] = useState(false);
-    const [showGridModal, setShowGridModal] = useState(false);
+    const [isGenerating, setIsGenerating] = useState(false)
+    const [showGridModal, setShowGridModal] = useState(false)
+    const [showParticipantsModal, setShowParticipantsModal] = useState(false)
+    const [showPrizesModal, setShowPrizesModal] = useState(false)
     
     // Google Sheet Data State
     const [participants, setParticipants] = useState([]);
@@ -77,8 +79,8 @@ export default function RaffleView({ raffle }) {
             }
         };
 
-        fetchSheetData();
-    }, [raffle.externalRegistrationLink]);
+        fetchSheetData()
+    }, [raffle.externalRegistrationLink])
 
     const handleToggleTicket = (number) => {
         // Read-only if external (managed via sheet)
@@ -417,37 +419,39 @@ export default function RaffleView({ raffle }) {
                         </div>
                     )}
                 
-                    {/* Participant Table */}
-                    {raffle.externalRegistrationLink && !loading && participants.length > 0 && (
-                        <div className="bg-slate-900/50 rounded-3xl border border-slate-800 overflow-hidden">
-                             <div className="p-6 border-b border-slate-800 flex justify-between items-center">
-                                <h3 className="text-xl font-bold text-white">Participantes</h3>
-                                <span className="bg-indigo-500/20 text-indigo-400 px-3 py-1 rounded-full text-xs font-bold border border-indigo-500/30">
-                                    {participants.length} Registrados
-                                </span>
-                             </div>
-                             <div className="max-h-[500px] overflow-auto">
-                                <table className="w-full text-left text-sm text-slate-400">
-                                    <thead className="bg-slate-800/50 text-xs uppercase font-bold text-slate-300 sticky top-0">
-                                        <tr>
-                                            <th className="px-6 py-4 whitespace-nowrap">Boleto</th>
-                                            <th className="px-6 py-4 whitespace-nowrap">Nombre</th>
-                                            <th className="px-6 py-4 whitespace-nowrap">GAP</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="divide-y divide-slate-800/50">
-                                        {[...participants].sort((a,b) => a.ticket - b.ticket).map((p, i) => (
-                                            <tr key={i} className="hover:bg-slate-800/30 transition-colors">
-                                                <td className="px-6 py-4 font-mono text-indigo-400 font-bold">#{p.ticket.toString().padStart(raffle.digits || 3, '0')}</td>
-                                                <td className="px-6 py-4 text-white whitespace-nowrap">{p.name}</td>
-                                                <td className="px-6 py-4">{p.gap}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                             </div>
-                        </div>
-                    )}
+                
+                    {/* ACCESOS RÁPIDOS (MODALES) */}
+                    <div className='grid grid-cols-1 sm:grid-cols-2 gap-4'>
+                        {raffle.externalRegistrationLink && participants.length > 0 && (
+                            <button
+                                onClick={() => setShowParticipantsModal(true)}
+                                className='bg-slate-900/50 p-6 rounded-3xl border border-slate-800 flex flex-col items-center justify-center gap-3 hover:bg-slate-800/50 transition-all group border-l-4 border-l-indigo-500'
+                            >
+                                <div className='p-3 bg-indigo-500/10 rounded-2xl group-hover:scale-110 transition-transform'>
+                                    <Users className='w-8 h-8 text-indigo-400' />
+                                </div>
+                                <div className='text-center'>
+                                    <p className='text-white font-bold text-lg'>Lista de Participantes</p>
+                                    <p className='text-slate-400 text-sm'>{participants.length} personas registradas</p>
+                                </div>
+                            </button>
+                        )}
+
+                        {raffle.prizes && raffle.prizes.length > 0 && (
+                            <button
+                                onClick={() => setShowPrizesModal(true)}
+                                className='bg-slate-900/50 p-6 rounded-3xl border border-slate-800 flex flex-col items-center justify-center gap-3 hover:bg-slate-800/50 transition-all group border-l-4 border-l-amber-500'
+                            >
+                                <div className='p-3 bg-amber-500/10 rounded-2xl group-hover:scale-110 transition-transform'>
+                                    <Ticket className='w-8 h-8 text-amber-400' />
+                                </div>
+                                <div className='text-center'>
+                                    <p className='text-white font-bold text-lg'>Posibles Premios</p>
+                                    <p className='text-slate-400 text-sm'>El ganador elige 3 de estos premios</p>
+                                </div>
+                            </button>
+                        )}
+                    </div>
                 </div>
             </div>
 
@@ -506,6 +510,82 @@ export default function RaffleView({ raffle }) {
                             >
                                 Cerrar
                             </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Participants Modal */}
+            {showParticipantsModal && (
+                <div className='fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6'>
+                    <div className='absolute inset-0 bg-slate-950/80 backdrop-blur-sm' onClick={() => setShowParticipantsModal(false)} />
+                    <div className='relative w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]'>
+                        <div className='p-6 border-b border-slate-800 flex items-center justify-between bg-slate-900/50'>
+                            <div>
+                                <h2 className='text-2xl font-bold text-white'>Participantes</h2>
+                                <p className='text-slate-400 text-sm mt-1'>{participants.length} Registrados</p>
+                            </div>
+                            <button onClick={() => setShowParticipantsModal(false)} className='p-2 hover:bg-slate-800 rounded-xl transition-colors text-slate-400 hover:text-white'>
+                                <X className='w-6 h-6' />
+                            </button>
+                        </div>
+                        <div className='overflow-auto'>
+                            <table className='w-full text-left text-sm text-slate-400'>
+                                <thead className='bg-slate-800/50 text-xs uppercase font-bold text-slate-300 sticky top-0'>
+                                    <tr>
+                                        <th className='px-6 py-4'>Boleto</th>
+                                        <th className='px-6 py-4'>Nombre</th>
+                                        <th className='px-6 py-4'>GAP</th>
+                                    </tr>
+                                </thead>
+                                <tbody className='divide-y divide-slate-800/50'>
+                                    {[...participants].sort((a,b) => a.ticket - b.ticket).map((p, i) => (
+                                        <tr key={i} className='hover:bg-slate-800/30'>
+                                            <td className='px-6 py-4 font-mono text-indigo-400 font-bold'>#{p.ticket.toString().padStart(raffle.digits || 3, '0')}</td>
+                                            <td className='px-6 py-4 text-white'>{p.name}</td>
+                                            <td className='px-6 py-4'>{p.gap}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Prizes Modal */}
+            {showPrizesModal && (
+                <div className='fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-6'>
+                    <div className='absolute inset-0 bg-slate-950/80 backdrop-blur-sm' onClick={() => setShowPrizesModal(false)} />
+                    <div className='relative w-full max-w-4xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]'>
+                        <div className='p-6 border-b border-slate-800 flex items-center justify-between bg-slate-900/50'>
+                            <div>
+                                <h2 className='text-2xl font-bold text-white'>Posibles Premios</h2>
+                                <p className='text-slate-400 text-sm mt-1'>El ganador se llevará 3 de estos premios</p>
+                            </div>
+                            <button onClick={() => setShowPrizesModal(false)} className='p-2 hover:bg-slate-800 rounded-xl transition-colors text-slate-400 hover:text-white'>
+                                <X className='w-6 h-6' />
+                            </button>
+                        </div>
+                        <div className='p-6 overflow-y-auto space-y-6'>
+                            <div className='bg-indigo-500/10 p-4 rounded-2xl border border-indigo-500/20 border-l-4 border-l-indigo-500'>
+                                <p className='text-slate-200 text-sm text-center'>
+                                    ¡Tú decides tu recompensa! El ganador de este sorteo podrá elegir <strong>3 de los premios</strong> mostrados a continuación.
+                                </p>
+                            </div>
+                            <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>
+                                {raffle.prizes.map((prize) => (
+                                    <div key={prize.id} className='bg-slate-800/30 rounded-3xl border border-slate-700/50 overflow-hidden flex flex-col'>
+                                        <div className='aspect-video overflow-hidden bg-slate-950/50 flex items-center justify-center'>
+                                            <img src={prize.image} alt={prize.name} className='w-full h-full object-contain' />
+                                        </div>
+                                        <div className='p-6'>
+                                            <h3 className='text-lg font-bold text-white mb-2'>{prize.name}</h3>
+                                            <p className='text-slate-400 text-sm'>{prize.description}</p>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </div>

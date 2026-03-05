@@ -23,6 +23,32 @@ export const raffles = [
       title: 'Sorteo Día de las Madres 🌸',
       description: 'Participa y gana un detalle exclusivo grabado en madera. ¡Sorteo el 24 de Abril!',
       image: 'https://images.unsplash.com/photo-1526047932273-341f2a7631f9?auto=format&fit=crop&q=80&w=1200',
-    }
+    },
+    prizes: [
+      {
+        id: 'caja-sorpresa',
+        name: 'caja sorpresa',
+        description: 'caja sorpresa',
+        image: '/dia de las madres/caja.jpg'
+      },
+      {
+        id: 'corazon',
+        name: 'corazon',
+        description: 'corazon',
+        image: '/dia de las madres/corazon.jpg'
+      },
+      {
+        id: 'flor',
+        name: 'flor',
+        description: 'flor',
+        image: '/dia de las madres/flor.jpg'
+      },
+      {
+        id: 'portaretratos',
+        name: 'portaretratos',
+        description: 'portaretratos',
+        image: '/dia de las madres/retrato.jpg'
+      }
+    ]
   }
 ];
