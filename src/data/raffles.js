@@ -28,19 +28,19 @@ export const raffles = [
       {
         id: 'caja-sorpresa',
         name: 'caja sorpresa',
-        description: 'caja sorpresa',
+        description: 'Caja explosiva del Día de la Madre',
         image: '/dia de las madres/caja.jpg'
       },
       {
         id: 'corazon',
         name: 'corazon',
-        description: 'corazon',
+        description: 'corazon con porta retrato',
         image: '/dia de las madres/corazon.jpg'
       },
       {
         id: 'flor',
         name: 'flor',
-        description: 'flor',
+        description: 'flor con mensaje personalizado',
         image: '/dia de las madres/flor.jpg'
       },
       {
@@ -48,6 +48,12 @@ export const raffles = [
         name: 'portaretratos',
         description: 'portaretratos',
         image: '/dia de las madres/retrato.jpg'
+      },
+      {
+        id: 'caja-sombra',
+        name: 'caja sombra',
+        description: 'Caja de sombras 3D para el Día de la Madre con flores y mariposas, arte en papel en capas',
+        image: '/dia de las madres/caja-sombra.webp'
       }
     ]
   }
