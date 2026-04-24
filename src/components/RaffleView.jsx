@@ -35,11 +35,20 @@ export default function RaffleView({ raffle }) {
                 const text = await response.text();
                 
                 // Simple CSV Parser
-                const rows = text.split('\n').map(row => {
-                    // Handle quoted values if necessary, but simple split might verify basic structure first
-                    // For robust parsing, regex is better, but this handles basic 'val,val,val'
-                    const match = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g) || row.split(',');
-                    return match.map(val => val.replace(/^"|"$/g, '').trim());
+                const rows = text.split('\n').filter(line => line.trim()).map(row => {
+                    // Robust CSV split handling optional quotes
+                    const cols = [];
+                    let start = 0;
+                    let inQuotes = false;
+                    for (let i = 0; i < row.length; i++) {
+                        if (row[i] === '"') inQuotes = !inQuotes;
+                        if (row[i] === ',' && !inQuotes) {
+                            cols.push(row.substring(start, i).replace(/^"|"$/g, '').trim());
+                            start = i + 1;
+                        }
+                    }
+                    cols.push(row.substring(start).replace(/^"|"$/g, '').trim());
+                    return cols;
                 });
 
                 // Assume header is first row: Nombre, GAP, No. Boleto
@@ -291,10 +300,12 @@ export default function RaffleView({ raffle }) {
                         
                         <div className="flex gap-4">
                             {raffle.externalRegistrationLink ? (
-                                <div className="flex-1 bg-indigo-500/10 border border-indigo-500/30 p-4 rounded-xl text-center">
-                                    <p className="text-white font-bold">Para adquirir tu número:</p>
-                                    <p className="text-indigo-300 text-sm mt-1">Contacta a David del GAP 023</p>
-                                </div>
+                                !raffle.hideRegistrationInfo && (
+                                    <div className="flex-1 bg-indigo-500/10 border border-indigo-500/30 p-4 rounded-xl text-center">
+                                        <p className="text-white font-bold">Para adquirir tu número:</p>
+                                        <p className="text-indigo-300 text-sm mt-1">Contacta a David del GAP 023</p>
+                                    </div>
+                                )
                             ) : (
                                 <button
                                     onClick={handleDownload}
@@ -447,7 +458,7 @@ export default function RaffleView({ raffle }) {
                                 </div>
                                 <div className='text-center'>
                                     <p className='text-white font-bold text-lg'>Posibles Premios</p>
-                                    <p className='text-slate-400 text-sm'>El ganador elige 3 de estos premios</p>
+                                    <p className='text-slate-400 text-sm'>{raffle.prizeInfo || 'El ganador elige 3 de estos premios'}</p>
                                 </div>
                             </button>
                         )}
@@ -537,7 +548,7 @@ export default function RaffleView({ raffle }) {
                                     <tr>
                                         <th className='px-6 py-4'>Boleto</th>
                                         <th className='px-6 py-4'>Nombre</th>
-                                        <th className='px-6 py-4'>GAP</th>
+                                        {raffle.id === 'dia-de-las-madres-gap' && <th className='px-6 py-4'>GAP</th>}
                                     </tr>
                                 </thead>
                                 <tbody className='divide-y divide-slate-800/50'>
@@ -545,7 +556,7 @@ export default function RaffleView({ raffle }) {
                                         <tr key={i} className='hover:bg-slate-800/30'>
                                             <td className='px-6 py-4 font-mono text-indigo-400 font-bold'>#{p.ticket.toString().padStart(raffle.digits || 3, '0')}</td>
                                             <td className='px-6 py-4 text-white'>{p.name}</td>
-                                            <td className='px-6 py-4'>{p.gap}</td>
+                                            {raffle.id === 'dia-de-las-madres-gap' && <td className='px-6 py-4'>{p.gap}</td>}
                                         </tr>
                                     ))}
                                 </tbody>
@@ -563,7 +574,7 @@ export default function RaffleView({ raffle }) {
                         <div className='p-6 border-b border-slate-800 flex items-center justify-between bg-slate-900/50'>
                             <div>
                                 <h2 className='text-2xl font-bold text-white'>Posibles Premios</h2>
-                                <p className='text-slate-400 text-sm mt-1'>El ganador se llevará 3 de estos premios</p>
+                                <p className='text-slate-400 text-sm mt-1'>{raffle.prizeModalSubtitle || 'El ganador se llevará 3 de estos premios'}</p>
                             </div>
                             <button onClick={() => setShowPrizesModal(false)} className='p-2 hover:bg-slate-800 rounded-xl transition-colors text-slate-400 hover:text-white'>
                                 <X className='w-6 h-6' />
@@ -572,8 +583,12 @@ export default function RaffleView({ raffle }) {
                         <div className='p-6 overflow-y-auto space-y-6'>
                             <div className='bg-indigo-500/10 p-4 rounded-2xl border border-indigo-500/20 border-l-4 border-l-indigo-500'>
                                 <p className='text-slate-200 text-sm text-center'>
-                                    ¡Tú decides tu recompensa! El ganador de este sorteo podrá elegir <strong>3 de los premios</strong> mostrados a continuación.<br/>
-                                    se iran agregando mas imagenes de los premios conforme se vayan adquiriendo los boletos
+                                    {raffle.prizeModalDescription || (
+                                        <>
+                                            ¡Tú decides tu recompensa! El ganador de este sorteo podrá elegir <strong>3 de los premios</strong> mostrados a continuación.<br/>
+                                            se iran agregando mas imagenes de los premios conforme se vayan adquiriendo los boletos
+                                        </>
+                                    )}
                                 </p>
                             </div>
                             <div className='grid grid-cols-1 sm:grid-cols-2 gap-6'>

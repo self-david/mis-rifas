@@ -24,14 +24,29 @@ export default function RaffleCard({ raffle }) {
                 const response = await fetch(csvUrl);
                 if (!response.ok) return;
                 
-                const text = await response.text();
-                const rows = text.split('\n');
-                // Assuming first row is header, so rows - 1. 
-                // A better check matches RaffleView logic but for count:
-                // Filter empty rows effectively
-                 const count = rows.slice(1).filter(r => {
-                    // Simple check if row has enough content to be a participant
-                    return r.trim().split(',').length >= 2;
+                const rows = text.split('\n').filter(line => line.trim()).map(row => {
+                    const cols = [];
+                    let start = 0;
+                    let inQuotes = false;
+                    for (let i = 0; i < row.length; i++) {
+                        if (row[i] === '"') inQuotes = !inQuotes;
+                        if (row[i] === ',' && !inQuotes) {
+                            cols.push(row.substring(start, i).replace(/^"|"$/g, '').trim());
+                            start = i + 1;
+                        }
+                    }
+                    cols.push(row.substring(start).replace(/^"|"$/g, '').trim());
+                    return cols;
+                });
+
+                // Get headers to find ticket index
+                const headers = rows[0].map(h => h.toLowerCase().replace('.', '').replace(/\s/g, ''));
+                const ticketIdx = headers.findIndex(h => h.includes('boleto'));
+                
+                const count = rows.slice(1).filter(row => {
+                    const ticketVal = row[ticketIdx > -1 ? ticketIdx : 2];
+                    const ticketNum = parseInt(ticketVal);
+                    return !isNaN(ticketNum);
                 }).length;
                 
                 setSheetOccupiedCount(count);
